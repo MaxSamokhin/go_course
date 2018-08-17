@@ -52,8 +52,7 @@ type SearchRequest struct {
 	Offset     int    // Можно учесть после сортировки
 	Query      string // подстрока в 1 из полей
 	OrderField string
-	// -1 по убыванию, 0 как встретилось, 1 по возрастанию
-	OrderBy int
+	OrderBy int // -1 по убыванию, 0 как встретилось, 1 по возрастанию
 }
 
 type SearchClient struct {
@@ -91,6 +90,7 @@ func (srv *SearchClient) FindUsers(req SearchRequest) (*SearchResponse, error) {
 	searcherReq.Header.Add("AccessToken", srv.AccessToken)
 	
 	resp, err := client.Do(searcherReq)
+
 	if err != nil {
 		if err, ok := err.(net.Error); ok && err.Timeout() {
 			return nil, fmt.Errorf("timeout for %s", searcherParams.Encode())
